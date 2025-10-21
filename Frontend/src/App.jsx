@@ -8,6 +8,7 @@ import SignUp from './components/SignUp'
 import Login from './components/Login'
 import Protected from './components/Protected'
 import { useState } from 'react'
+import New from './components/New'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path='/' element={<Protected><List /></Protected>} />
         <Route path='/add' element={<Protected><AddTask /></Protected>} />
         <Route path='/update/:id' element={<Protected><UpdateTask /></Protected>} />
+        <Route path='/new' element={<Protected><New /></Protected>} />
         <Route path='/signup' element={<SignUp />} />
         <Route path='/login' element={<Login />} />
       </Routes>

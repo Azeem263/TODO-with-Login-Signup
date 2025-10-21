@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 function Navabar() {
   const [login, setLogin] = useState(localStorage.getItem("login"));
   const navigate = useNavigate()
+
   const logout = () => {
     localStorage.removeItem("login");
     setTimeout(() => {
@@ -38,6 +39,9 @@ function Navabar() {
             </li>
             <li className="hover:text-gray-300">
               <Link onClick={logout}>Logout</Link>
+            </li>
+            <li className="hover:text-gray-300">
+              <Link to="new">New Page</Link>
             </li>
           </>
         ) : null}

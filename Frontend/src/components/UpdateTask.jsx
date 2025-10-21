@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 function UpdateTask() {
@@ -12,30 +11,35 @@ function UpdateTask() {
   }, [id]);
 
   const getTask = async (id) => {
-    let item = await fetch("http://localhost:3200/task/" + id);
+    let item = await fetch("http://localhost:3200/task/" + id, {
+      credentials: "include",
+    });
     item = await item.json();
-    if (item.result) {
+    if (item.success) {
       setTaskData(item.result);
     }
   };
-  const updateTask = async (e) => {
-    e.preventDefault();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault(); 
     let res = await fetch("http://localhost:3200/update-task", {
       method: "PUT",
+      credentials: "include",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: id, ...taskData }), // ✅ sending correct id
+      body: JSON.stringify({ id: id, ...taskData }),
     });
 
     const data = await res.json();
     console.log("Update response:", data);
 
     if (data.success) {
-      // alert("Task updated successfully!");
-      navigate("/");
+      alert("Task updated successfully!");
+      navigate("/"); 
     } else {
       alert("Update failed. Try again!");
     }
   };
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="bg-gray-200 p-8 rounded-2xl shadow-lg w-96 transition-transform transform hover:scale-105 hover:shadow-2xl">
@@ -43,7 +47,7 @@ function UpdateTask() {
           Update Task
         </h1>
 
-        <form className="flex flex-col space-y-4">
+        <form className="flex flex-col space-y-4" onSubmit={handleSubmit}>
           <label htmlFor="title" className="font-medium text-gray-700">
             Title
           </label>
@@ -75,7 +79,6 @@ function UpdateTask() {
           ></textarea>
 
           <button
-            onClick={updateTask}
             type="submit"
             className="bg-gray-700 text-white font-semibold py-2 rounded-md mt-2 hover:bg-gray-900 transition-all duration-300"
           >

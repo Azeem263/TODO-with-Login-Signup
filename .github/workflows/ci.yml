@@ -9,23 +9,33 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
 
     steps:
       - uses: actions/checkout@v4
-
-      - name: Setup Node.js
+      - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
-          node-version: 18
-          cache: 'npm'
+          node-version: ${{ matrix.node-version }}
 
-      - name: Install dependencies
+      # Frontend build
+      - name: Install frontend dependencies
+        working-directory: ./frontend
         run: npm install
 
-      - name: Build project
+      - name: Build frontend
+        working-directory: ./frontend
         run: npm run build --if-present
 
-      - name: Run tests
+      # Backend build
+      - name: Install backend dependencies
+        working-directory: ./backend~
+        run: npm install
+
+      - name: Test backend
+        working-directory: ./backend
         run: npm test --if-present
 
       # 🔹 New Step for Continuous Delivery
@@ -34,3 +44,6 @@ jobs:
         with:
           name: build-output
           path: build/
+
+
+          
